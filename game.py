@@ -1,8 +1,8 @@
 import random
 
 class Player:
-    def __init__(self):
-        self.name = "Tester"
+    def __init__(self, name="Tester"):
+        self.name = name
         self.health = 100
         self.coin = 0
         self.x = 0
@@ -13,16 +13,16 @@ class Player:
             self.x -= 1
         elif direction == 'a' and self.y > 0:
             self.y -= 1
-        elif direction == 's' and self.x < self.size - 1:
+        elif direction == 's' and self.x < map_size - 1:
             self.x += 1
-        elif direction == 'd' and self.y < self.size - 1:
+        elif direction == 'd' and self.y < map_size - 1:
             self.y += 1
         else:
             print("You cannot move that way!")
 
 class GameMap:
-    def __init__(self):
-        self.size = 9
+    def __init__(self, size=9):
+        self.size = size
 
     def draw(self, player):
         print("=" * 24)
@@ -36,9 +36,9 @@ class GameMap:
                     print(".", end = "  ")
             print()
         print("=" * 25)
-        print(f"Health: {player['health']}")
+        print(f"Health: {player.health}")
         print("-" * 25)
-        print(f"Coin: {player['coin']}")
+        print(f"Coin: {player.coin}")
         print("=" * 25)
 
 class Game:
@@ -46,37 +46,27 @@ class Game:
         self.game_name = "Leviathan Plunge"
         self.name = "Tester"
         self.events = ["find a coin", "meet a monster", "do nothing"]
-        self.player = Player() # initialize a class as the attribute
+        self.player = Player()
         self.map = GameMap()
-        self.map_size = self.map_size
+        self.map_size = self.map.size
 
     def check_event(self):
         event = random.choice(self.events)
-
         if event == "find a coin":
             self.player.coin += 1
-        
         if event == "meet a monster":
             self.player.health -= 10
 
     def play(self):
-        # TODO: put the code of function `main()` here
-        # some function calling and dictionary operations must be modified
         GameMap().draw(self.player)
         direction = input("Your next move (w/a/s/d/q): ")
         while direction != "q":
             self.player.move(direction, self.map_size)
-
             if self.player.x == self.map_size - 1 and self.player.y == self.map_size - 1: 
                 print("Congratulations! You reach the gate for next level.")
                 break
-
             self.check_event()
-
-            GameMap().draw(self.player.x, self.player.y)
+            GameMap().draw(self.player)
             direction = input("Your next move (w/a/s/d/q): ")
-
-
-
 if __name__ == "__main__":
     Game().play()
